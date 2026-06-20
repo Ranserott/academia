@@ -56,7 +56,7 @@ export default function AdminCoursesPage() {
           </div>
 
           {/* Courses Table */}
-          <CourseTable />
+          <CourseTable courses={[]} />
 
           {/* Footer Branding */}
           <footer className="pt-8 pb-4 text-center">
