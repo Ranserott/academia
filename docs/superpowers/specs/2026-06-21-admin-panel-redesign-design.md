@@ -40,7 +40,7 @@ Unify the visual language of the `/admin/*` pages with the rest of the academia 
 app/admin/
   layout.tsx                 ← NEW: shared Sidebar + main container
   courses/
-    page.tsx                 ← MODIFIED: main content only (no inline Sidebar/Header)
+    page.tsx                 ← MODIFIED: drops inline Sidebar (moves to layout); keeps inline AdminHeader
 
 components/admin/
   AdminSidebar.tsx           ← MODIFIED: theme tokens + "Pronto" badges
@@ -168,7 +168,7 @@ Add `import { BookOpen } from "lucide-react"`.
 
 Add a close (×) icon button in the modal's top-right corner: `<button onClick={() => setEditingLesson(null)} className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"><X className="w-5 h-5" /></button>`. The modal container gets `relative` positioning.
 
-Modal size stays `max-w-lg`. The dark overlay (`bg-black/50` → `bg-black/60`) gets a small contrast bump.
+Modal size stays `max-w-lg`. Overlay opacity (`bg-black/50`) is unchanged.
 
 ---
 
