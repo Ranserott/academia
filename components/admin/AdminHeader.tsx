@@ -31,7 +31,7 @@ export const AdminHeader = ({ title }: AdminHeaderProps) => {
         {/* Notifications */}
         <button className="relative p-2 text-muted-foreground hover:text-white transition-colors">
           <Bell className="w-5 h-5" />
-          <span className="absolute top-2 right-2 w-2 h-2 bg-orange-500 rounded-full border-2 border-slate-950"></span>
+          <span className="absolute top-2 right-2 w-2 h-2 bg-orange-500 rounded-full border-2 border-background"></span>
         </button>
       </div>
     </header>
