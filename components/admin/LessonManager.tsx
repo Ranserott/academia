@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { X } from "lucide-react";
+import { Button } from "@/components/ui/Button";
 
 interface Lesson {
   id: string;
@@ -95,7 +97,7 @@ export function LessonManager() {
   const currentCourse = courses.find((c) => c.id === selectedCourse);
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
+    <div className="bg-card text-card-foreground border border-border rounded-lg p-6">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-bold">Gestionar Lecciones</h2>
         <button
@@ -113,7 +115,7 @@ export function LessonManager() {
         <select
           value={selectedCourse}
           onChange={(e) => setSelectedCourse(e.target.value)}
-          className="w-full p-2 border rounded-lg"
+          className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
         >
           <option value="">Seleccionar curso...</option>
           {courses.map((course) => (
@@ -128,25 +130,25 @@ export function LessonManager() {
       {currentCourse && (
         <div className="space-y-4">
           {currentCourse.lessons.length === 0 ? (
-            <p className="text-gray-500 text-center py-4">
+            <p className="text-muted-foreground text-center py-4">
               Este curso aún no tiene lecciones
             </p>
           ) : (
             currentCourse.lessons.map((lesson) => (
               <div
                 key={lesson.id}
-                className="border rounded-lg p-4 hover:border-primary/50 transition-colors"
+                className="bg-secondary/30 border border-border rounded-lg p-4 hover:border-primary/50 transition-colors"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h3 className="font-medium">{lesson.title}</h3>
                     {lesson.description && (
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-muted-foreground mt-1">
                         {lesson.description}
                       </p>
                     )}
                     {lesson.videoUrl && (
-                      <p className="text-sm text-green-600 mt-1 flex items-center gap-1">
+                      <p className="text-sm text-green-400 mt-1 flex items-center gap-1">
                         <span>🎬</span>
                         {lesson.videoUrl.includes("youtube") && "YouTube"}
                         {lesson.videoUrl.includes("vimeo") && "Vimeo"}
@@ -158,7 +160,7 @@ export function LessonManager() {
                   </div>
                   <button
                     onClick={() => setEditingLesson(lesson)}
-                    className="ml-4 px-3 py-1 text-sm bg-gray-100 rounded hover:bg-gray-200"
+                    className="ml-4 px-3 py-1 text-sm bg-secondary hover:bg-secondary/80 text-foreground rounded"
                   >
                     Editar
                   </button>
@@ -172,24 +174,32 @@ export function LessonManager() {
       {/* Edit Modal */}
       {editingLesson && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-lg mx-4">
-            <h3 className="text-lg font-bold mb-4">Editar Lección</h3>
+          <div className="relative bg-card text-card-foreground border border-border rounded-lg p-6 w-full max-w-lg mx-4">
+            <button
+              type="button"
+              onClick={() => setEditingLesson(null)}
+              className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Cerrar"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-lg font-bold mb-4 pr-8">Editar Lección</h3>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Título</label>
+                <label className="block text-sm font-medium mb-1 text-foreground">Título</label>
                 <input
                   type="text"
                   value={editingLesson.title}
                   onChange={(e) =>
                     setEditingLesson({ ...editingLesson, title: e.target.value })
                   }
-                  className="w-full p-2 border rounded-lg"
+                  className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Descripción</label>
+                <label className="block text-sm font-medium mb-1 text-foreground">Descripción</label>
                 <textarea
                   value={editingLesson.description || ""}
                   onChange={(e) =>
@@ -198,13 +208,13 @@ export function LessonManager() {
                       description: e.target.value,
                     })
                   }
-                  className="w-full p-2 border rounded-lg"
+                  className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                   rows={2}
                 />
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">
+                <label className="block text-sm font-medium mb-1 text-foreground">
                   Video URL (YouTube o Vimeo)
                 </label>
                 <input
@@ -217,15 +227,15 @@ export function LessonManager() {
                     })
                   }
                   placeholder="https://www.youtube.com/watch?v=..."
-                  className="w-full p-2 border rounded-lg"
+                  className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                 />
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   Pega el link de YouTube o Vimeo. Se embedear automáticamente.
                 </p>
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-1">Orden</label>
+                <label className="block text-sm font-medium mb-1 text-foreground">Orden</label>
                 <input
                   type="number"
                   value={editingLesson.order}
@@ -235,25 +245,26 @@ export function LessonManager() {
                       order: parseInt(e.target.value) || 0,
                     })
                   }
-                  className="w-full p-2 border rounded-lg"
+                  className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                 />
               </div>
             </div>
 
             <div className="flex gap-3 mt-6">
-              <button
+              <Button
                 onClick={saveLesson}
                 disabled={loading}
-                className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
+                variant="primary"
+                className="flex-1"
               >
                 {loading ? "Guardando..." : "Guardar"}
-              </button>
-              <button
+              </Button>
+              <Button
                 onClick={() => setEditingLesson(null)}
-                className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200"
+                variant="ghost"
               >
                 Cancelar
-              </button>
+              </Button>
             </div>
           </div>
         </div>
