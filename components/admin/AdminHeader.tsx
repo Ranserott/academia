@@ -9,7 +9,7 @@ interface AdminHeaderProps {
 
 export const AdminHeader = ({ title }: AdminHeaderProps) => {
   return (
-    <header className="h-20 border-b border-border bg-slate-950/50 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-30">
+    <header className="h-20 border-b border-border bg-background/80 backdrop-blur-md flex items-center justify-between px-8 sticky top-0 z-30">
       <div className="flex items-center gap-4">
         <button className="lg:hidden p-2 text-muted-foreground hover:text-white transition-colors">
           <Menu className="w-6 h-6" />
