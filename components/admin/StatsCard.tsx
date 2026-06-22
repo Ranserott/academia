@@ -10,7 +10,7 @@ interface StatsCardProps {
 
 export function StatsCard({ title, value, change, trend, icon: Icon }: StatsCardProps) {
   const getTrendColor = () => {
-    if (!trend || trend === "neutral") return "text-gray-500";
+    if (!trend || trend === "neutral") return "text-muted-foreground";
     return trend === "up" ? "text-green-500" : "text-red-500";
   };
 
@@ -20,10 +20,10 @@ export function StatsCard({ title, value, change, trend, icon: Icon }: StatsCard
   };
 
   return (
-    <div className="bg-white p-6 rounded-xl shadow-sm border">
+    <div className="bg-card text-card-foreground p-6 rounded-xl border border-border">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm text-gray-500">{title}</p>
+          <p className="text-sm text-muted-foreground">{title}</p>
           <p className="text-2xl font-bold mt-1">{value}</p>
           {change !== undefined && (
             <p className={`text-sm mt-1 ${getTrendColor()}`}>
