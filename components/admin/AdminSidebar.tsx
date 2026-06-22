@@ -12,20 +12,20 @@ import {
 } from "lucide-react";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/courses", label: "Courses", icon: BookOpen },
-  { href: "/admin/students", label: "Students", icon: Users },
-  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, available: true },
+  { href: "/admin/courses", label: "Courses", icon: BookOpen, available: true },
+  { href: "/admin/students", label: "Students", icon: Users, available: false },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3, available: false },
+  { href: "/admin/settings", label: "Settings", icon: Settings, available: false },
 ];
 
 export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-slate-900 border-r border-slate-800 flex flex-col min-h-0">
+    <aside className="w-64 bg-card border-r border-border flex flex-col min-h-0">
       {/* Logo */}
-      <div className="p-6 border-b border-slate-800">
+      <div className="p-6 border-b border-border">
         <Link href="/" className="flex items-center gap-2">
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
             <span className="text-white font-bold text-xl">T</span>
@@ -45,21 +45,28 @@ export function AdminSidebar() {
               key={item.href}
               href={item.href}
               className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                isActive
-                  ? "bg-primary text-white"
-                  : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                !item.available
+                  ? "opacity-60 cursor-not-allowed pointer-events-none"
+                  : isActive
+                    ? "bg-primary text-white"
+                    : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               }`}
             >
               <Icon className="w-5 h-5" />
               <span>{item.label}</span>
+              {!item.available && (
+                <span className="ml-auto text-[10px] bg-secondary text-muted-foreground px-1.5 py-0.5 rounded-full uppercase tracking-wider font-medium">
+                  Pronto
+                </span>
+              )}
             </Link>
           );
         })}
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-slate-800">
-        <button className="flex items-center gap-3 px-4 py-3 w-full text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+      <div className="p-4 border-t border-border">
+        <button className="flex items-center gap-3 px-4 py-3 w-full text-muted-foreground hover:bg-secondary hover:text-foreground rounded-lg transition-colors">
           <LogOut className="w-5 h-5" />
           <span>Log Out</span>
         </button>
