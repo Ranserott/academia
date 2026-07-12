@@ -42,3 +42,11 @@ next-env.d.ts
 
 # brainstorming / design sessions (visual companion artifacts)
 /.superpowers/
+
+# prisma dev database (SQLite - never commit)
+/prisma/*.db
+/prisma/*.db-journal
+/prisma/dev.db*
+
+# graphify knowledge graph artifacts (build outputs, not source)
+/graphify-out/

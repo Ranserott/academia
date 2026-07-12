@@ -39,85 +39,95 @@ export default function SignUpPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Something went wrong");
+        setError(data.error || "Algo salió mal");
         return;
       }
 
       router.push("/auth/signin?registered=true");
     } catch (err) {
-      setError("Something went wrong");
+      setError("Algo salió mal");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full p-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center mb-6">Crear Cuenta</h1>
-        
+    <div className="min-h-screen flex items-center justify-center bg-background px-4">
+      <div className="max-w-md w-full p-6 bg-card border border-border rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center mb-6 text-foreground">
+          Crear Cuenta
+        </h1>
+
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+            <div className="p-3 bg-red-500/10 border border-red-500/30 text-red-400 rounded-lg text-sm">
               {error}
             </div>
           )}
-          
+
           <div>
-            <label className="block text-sm font-medium mb-1">Nombre</label>
+            <label className="block text-sm font-medium mb-1 text-foreground">
+              Nombre
+            </label>
             <input
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary"
+              className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:outline-none transition-colors"
               required
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1 text-foreground">
+              Email
+            </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary"
+              className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:outline-none transition-colors"
               required
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium mb-1">Contraseña</label>
+            <label className="block text-sm font-medium mb-1 text-foreground">
+              Contraseña
+            </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary"
+              className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:outline-none transition-colors"
               required
               minLength={6}
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium mb-1">Confirmar Contraseña</label>
+            <label className="block text-sm font-medium mb-1 text-foreground">
+              Confirmar Contraseña
+            </label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-2 border rounded-lg focus:ring-2 focus:ring-primary"
+              className="w-full p-2 bg-secondary/50 border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:ring-2 focus:ring-primary focus:outline-none transition-colors"
               required
             />
           </div>
-          
+
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50"
+            className="w-full py-2 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 font-medium transition-colors"
           >
             {loading ? "Creando cuenta..." : "Crear Cuenta"}
           </button>
         </form>
-        
-        <p className="mt-4 text-center text-sm">
+
+        <p className="mt-4 text-center text-sm text-muted-foreground">
           ¿Ya tienes cuenta?{" "}
           <Link href="/auth/signin" className="text-primary hover:underline">
             Inicia Sesión
