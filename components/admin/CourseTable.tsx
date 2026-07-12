@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { BookOpen } from "lucide-react";
 
 interface Course {
@@ -71,10 +72,13 @@ export function CourseTable({ courses }: CourseTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                   {course.price === 0 ? "Gratis" : `$${course.price.toLocaleString("es-CL")}`}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
-                  <button className="text-primary hover:text-primary/80">
-                    Editar
-                  </button>
+                <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <Link
+                    href={`/admin/courses/${course.id}`}
+                    className="text-primary hover:text-primary/80 font-medium"
+                  >
+                    Editar →
+                  </Link>
                 </td>
               </tr>
             ))

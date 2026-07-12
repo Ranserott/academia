@@ -3,7 +3,6 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { CourseTable } from "@/components/admin/CourseTable";
-import { LessonManager } from "@/components/admin/LessonManager";
 
 export default async function AdminCoursesPage() {
   const session = await auth();
@@ -19,7 +18,7 @@ export default async function AdminCoursesPage() {
       published: true,
       price: true,
       createdAt: true,
-      _count: { select: { lessons: true, enrollments: true } },
+      _count: { select: { lessons: true, enrollments: true, modules: true } },
     },
   });
 
@@ -30,6 +29,7 @@ export default async function AdminCoursesPage() {
     price: c.price,
     createdAt: c.createdAt,
     lessonCount: c._count.lessons,
+    moduleCount: c._count.modules,
     enrollmentCount: c._count.enrollments,
   }));
 
@@ -41,11 +41,9 @@ export default async function AdminCoursesPage() {
         <div>
           <h2 className="text-2xl font-bold mb-2">Cursos</h2>
           <p className="text-muted-foreground">
-            Administra los cursos publicados y sus lecciones
+            Editá los módulos y bloques de cada curso. Cada módulo puede tener texto y video.
           </p>
         </div>
-
-        <LessonManager />
 
         <div>
           <h3 className="text-lg font-bold mb-4">Listado de Cursos</h3>

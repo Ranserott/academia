@@ -27,10 +27,40 @@ model Course {
   price       Int          @default(0) // price in cents
   image       String?
   published   Boolean      @default(false)
-  lessons     Lesson[]
+  lessons     Lesson[]     // deprecated, use modules
+  modules     Module[]
   enrollments Enrollment[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+}
+
+model Module {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  order       Int            @default(0)
+  courseId    String
+  course      Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  blocks      ContentBlock[]
+  progress    Progress[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([courseId])
+}
+
+model ContentBlock {
+  id        String   @id @default(cuid())
+  type      String   // "text" | "video"
+  title     String?
+  body      String   // for video: URL; for text: markdown/HTML content
+  order     Int      @default(0)
+  moduleId  String
+  module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([moduleId])
 }
 
 model Lesson {
@@ -63,20 +93,23 @@ model Progress {
   id        String   @id @default(cuid())
   userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lessonId  String
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lessonId  String?  // deprecated
+  lesson    Lesson?  @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  moduleId  String?
+  module    Module?  @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([userId, lessonId])
+  @@unique([userId, moduleId])
 }
 
 model Certificate {
-  id           String   @id @default(cuid())
-  userId       String
-  courseId     String
-  issuedAt     DateTime @default(now())
+  id             String   @id @default(cuid())
+  userId         String
+  courseId       String
+  issuedAt       DateTime @default(now())
   certificateUrl String?
 
   @@unique([userId, courseId])

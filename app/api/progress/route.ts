@@ -10,16 +10,33 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { lessonId, completed } = await request.json();
+    const { lessonId, moduleId, completed } = await request.json();
 
-    if (!lessonId) {
+    if (!lessonId && !moduleId) {
       return NextResponse.json(
-        { error: "Lesson ID is required" },
+        { error: "lessonId or moduleId required" },
         { status: 400 }
       );
     }
 
-    // Upsert progress
+    if (moduleId) {
+      const progress = await prisma.progress.upsert({
+        where: {
+          userId_moduleId: {
+            userId: session.user.id,
+            moduleId,
+          },
+        },
+        update: { completed: completed ?? false },
+        create: {
+          userId: session.user.id,
+          moduleId,
+          completed: completed ?? false,
+        },
+      });
+      return NextResponse.json({ success: true, progress });
+    }
+
     const progress = await prisma.progress.upsert({
       where: {
         userId_lessonId: {
@@ -27,7 +44,7 @@ export async function POST(request: Request) {
           lessonId,
         },
       },
-      update: { completed },
+      update: { completed: completed ?? false },
       create: {
         userId: session.user.id,
         lessonId,
