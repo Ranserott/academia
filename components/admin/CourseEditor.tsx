@@ -14,7 +14,7 @@ interface ContentBlock {
   moduleId: string;
 }
 
-interface Module {
+export interface Module {
   id: string;
   title: string;
   description: string | null;

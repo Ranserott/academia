@@ -3,7 +3,7 @@ import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { CourseEditor } from "@/components/admin/CourseEditor";
+import { CourseEditor, type Module as EditorModule } from "@/components/admin/CourseEditor";
 import { ArrowLeft } from "lucide-react";
 
 export default async function EditCoursePage({
@@ -67,7 +67,7 @@ export default async function EditCoursePage({
           </p>
         </div>
 
-        <CourseEditor courseId={course.id} initialModules={course.modules} />
+        <CourseEditor courseId={course.id} initialModules={course.modules as unknown as EditorModule[]} />
       </main>
     </div>
   );
