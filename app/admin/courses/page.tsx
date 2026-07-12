@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { CourseTable } from "@/components/admin/CourseTable";
+import { NewCourseDialog } from "@/components/admin/NewCourseDialog";
 
 export default async function AdminCoursesPage() {
   const session = await auth();
@@ -38,11 +39,14 @@ export default async function AdminCoursesPage() {
       <AdminHeader title="Gestión de Cursos" />
 
       <main className="flex-1 overflow-y-auto p-8 space-y-8">
-        <div>
-          <h2 className="text-2xl font-bold mb-2">Cursos</h2>
-          <p className="text-muted-foreground">
-            Editá los módulos y bloques de cada curso. Cada módulo puede tener texto y video.
-          </p>
+        <div className="flex items-start justify-between flex-wrap gap-4">
+          <div>
+            <h2 className="text-2xl font-bold mb-2">Cursos</h2>
+            <p className="text-muted-foreground">
+              Editá los módulos y bloques de cada curso. Cada módulo puede tener texto y video.
+            </p>
+          </div>
+          <NewCourseDialog />
         </div>
 
         <div>
