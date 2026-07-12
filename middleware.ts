@@ -23,6 +23,10 @@ export default auth((req) => {
     return NextResponse.redirect(new URL("/auth/signin", req.nextUrl));
   }
 
+  if (isOnDashboard && isLoggedIn && role === "admin") {
+    return NextResponse.redirect(new URL("/admin", req.nextUrl));
+  }
+
   if (isOnAuth && isLoggedIn) {
     return NextResponse.redirect(
       new URL(role === "admin" ? "/admin" : "/dashboard", req.nextUrl),

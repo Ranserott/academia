@@ -1,13 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function SignInPage() {
   const router = useRouter();
-  const { update } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -28,9 +27,7 @@ export default function SignInPage() {
       if (result?.error) {
         setError("Email o contraseña incorrectos");
       } else {
-        const session = await update();
-        const role = session?.user?.role;
-        router.push(role === "admin" ? "/admin" : "/dashboard");
+        router.push("/dashboard");
         router.refresh();
       }
     } catch (err) {
