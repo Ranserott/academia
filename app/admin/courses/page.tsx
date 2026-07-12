@@ -1,67 +1,56 @@
-"use client";
-
-import React from "react";
+import { redirect } from "next/navigation";
+import { auth } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 import { AdminHeader } from "@/components/admin/AdminHeader";
-import { StatsCard } from "@/components/admin/StatsCard";
 import { CourseTable } from "@/components/admin/CourseTable";
 import { LessonManager } from "@/components/admin/LessonManager";
-import {
-  DollarSign,
-  Users,
-  Trophy,
-  FileText,
-} from "lucide-react";
 
-export default function AdminCoursesPage() {
+export default async function AdminCoursesPage() {
+  const session = await auth();
+  if (!session?.user || session.user.role !== "admin") {
+    redirect("/auth/signin");
+  }
+
+  const courses = await prisma.course.findMany({
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      title: true,
+      published: true,
+      price: true,
+      createdAt: true,
+      _count: { select: { lessons: true, enrollments: true } },
+    },
+  });
+
+  const tableCourses = courses.map((c) => ({
+    id: c.id,
+    title: c.title,
+    published: c.published,
+    price: c.price,
+    createdAt: c.createdAt,
+    lessonCount: c._count.lessons,
+    enrollmentCount: c._count.enrollments,
+  }));
+
   return (
     <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-      <AdminHeader title="Courses Overview" />
+      <AdminHeader title="Gestión de Cursos" />
 
       <main className="flex-1 overflow-y-auto p-8 space-y-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatsCard
-            title="Total Revenue"
-            value="$124,500"
-            change="+12.5%"
-            trend="up"
-            icon={DollarSign}
-          />
-          <StatsCard
-            title="Active Students"
-            value="3,420"
-            change="+5.2%"
-            trend="up"
-            icon={Users}
-          />
-          <StatsCard
-            title="Completion Rate"
-            value="68.4%"
-            change="-2.1%"
-            trend="down"
-            icon={Trophy}
-          />
-          <StatsCard
-            title="Total Courses"
-            value="45"
-            change="0%"
-            trend="neutral"
-            icon={FileText}
-          />
+        <div>
+          <h2 className="text-2xl font-bold mb-2">Cursos</h2>
+          <p className="text-muted-foreground">
+            Administra los cursos publicados y sus lecciones
+          </p>
         </div>
 
-        {/* Lesson Manager */}
         <LessonManager />
 
-        {/* Courses Table */}
-        <CourseTable courses={[]} />
-
-        {/* Footer Branding */}
-        <footer className="pt-8 pb-4 text-center">
-          <p className="text-xs text-muted-foreground">
-            © 2024 Academia Inc. All rights reserved.
-          </p>
-        </footer>
+        <div>
+          <h3 className="text-lg font-bold mb-4">Listado de Cursos</h3>
+          <CourseTable courses={tableCourses} />
+        </div>
       </main>
     </div>
   );

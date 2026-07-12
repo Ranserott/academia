@@ -38,9 +38,9 @@ export async function PUT(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { lessonId, ...data } = await request.json();
+    const { id, ...data } = await request.json();
 
-    if (!lessonId) {
+    if (!id) {
       return NextResponse.json(
         { error: "Lesson ID is required" },
         { status: 400 }
@@ -48,7 +48,7 @@ export async function PUT(request: Request) {
     }
 
     const lesson = await prisma.lesson.update({
-      where: { id: lessonId },
+      where: { id },
       data,
     });
 
