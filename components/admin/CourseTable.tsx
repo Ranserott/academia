@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { BookOpen, Loader2, Trash2 } from "lucide-react";
 
 interface Course {
   id: string;
@@ -16,6 +18,25 @@ interface CourseTableProps {
 }
 
 export function CourseTable({ courses }: CourseTableProps) {
+  const router = useRouter();
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+
+  const deleteCourse = async (id: string, title: string) => {
+    if (!confirm(`¿Eliminar "${title}" y todos sus módulos, bloques, inscripciones y progreso? Esta acción no se puede deshacer.`)) {
+      return;
+    }
+    setDeletingId(id);
+    try {
+      const res = await fetch(`/api/admin/courses/${id}`, { method: "DELETE" });
+      if (res.ok) router.refresh();
+      else alert("No se pudo eliminar el curso");
+    } catch {
+      alert("Error de red");
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
   return (
     <div className="bg-card border border-border rounded-lg overflow-hidden">
       <table className="min-w-full divide-y divide-border">
@@ -30,7 +51,7 @@ export function CourseTable({ courses }: CourseTableProps) {
             <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Precio
             </th>
-            <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
+            <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
               Acciones
             </th>
           </tr>
@@ -72,13 +93,28 @@ export function CourseTable({ courses }: CourseTableProps) {
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-muted-foreground">
                   {course.price === 0 ? "Gratis" : `$${course.price.toLocaleString("es-CL")}`}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  <Link
-                    href={`/admin/courses/${course.id}`}
-                    className="text-primary hover:text-primary/80 font-medium"
-                  >
-                    Editar →
-                  </Link>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-right">
+                  <div className="inline-flex items-center gap-3">
+                    <Link
+                      href={`/admin/courses/${course.id}`}
+                      className="text-primary hover:text-primary/80 font-medium"
+                    >
+                      Editar →
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => deleteCourse(course.id, course.title)}
+                      disabled={deletingId === course.id}
+                      className="text-muted-foreground hover:text-red-400 disabled:opacity-30 inline-flex items-center"
+                      aria-label="Eliminar curso"
+                    >
+                      {deletingId === course.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <Trash2 className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))
