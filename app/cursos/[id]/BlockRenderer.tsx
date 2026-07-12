@@ -1,7 +1,7 @@
 import { FileText, Video as VideoIcon } from "lucide-react";
 import { getVideoEmbedUrl } from "@/lib/video";
 
-interface Block {
+export interface Block {
   id: string;
   type: "text" | "video";
   title: string | null;

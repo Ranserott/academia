@@ -3,7 +3,7 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/lib/auth";
 import { EnrollButton } from "./EnrollButton";
-import { BlockRenderer } from "./BlockRenderer";
+import { BlockRenderer, type Block as RendererBlock } from "./BlockRenderer";
 import { ModuleChecklist } from "./ModuleChecklist";
 import { BookOpen } from "lucide-react";
 
@@ -174,7 +174,7 @@ export default async function CoursePage({
                       </p>
                     ) : (
                       mod.blocks.map((block) => (
-                        <BlockRenderer key={block.id} block={block} />
+                        <BlockRenderer key={block.id} block={block as RendererBlock} />
                       ))
                     )}
                   </div>
